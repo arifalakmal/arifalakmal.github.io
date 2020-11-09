@@ -1,0 +1,176 @@
+<html>
+
+<head>
+    <title>05211940000144 - Arifal Akmal</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .label {
+            float: left;
+            width: 120px;
+        }
+
+        .infobox {
+            width: 120px;
+        }
+
+        .error {
+            color: red;
+            padding-left: 10px;
+        }
+
+        .submit {
+            margin-left: 125px;
+            margin-top: 10px;
+        }
+
+        div {
+            padding: 5px;
+        }
+
+        .chkb {
+            margin-left: 125px;
+            margin-top: 10px;
+        }
+
+        .radiobtn {
+            margin-left: 125px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+        <div class="jumbotron text-center" style="margin-bottom:0">
+        <h1>STAYHealth</h1>
+        <p>Penyedia Jasa Kesehatan se-Jabodetabek </p> 
+      </div>
+      <br>
+        <div class="text-center text-info">
+            <h3>Form Pesan Layanan</h3>
+        </div>
+      <br>
+    <form>
+        <div>
+            <span class="label">Username </span>
+            <input type="text" class="username" name="username" />
+            <span class="error">Username harus diisi dan hanya boleh terdiri atas huruf, angka dan underscore</span>
+        </div>
+        <div>
+            <span class="label">Password </span>
+            <input type="password" class="password" name="password" />
+            <span class="error"> Password harus diisi</span>
+        </div>
+        <div>
+            <span class="label">Email </span>
+            <input type="text" class="emailadd" name="emailid" />
+            <span class="error"> Alamat e-mail tidak valid</span>
+        </div>
+        <div>
+            <span class="label">Jenis Layanan </span> <br>
+            <input type="checkbox" id="tensi" name="tensi" value=25 class="chkb">Periksa Tekanan Darah (Rp.20.000) <br>
+            <input type="checkbox" id="mata" name="mata" value=75 class="chkb">Periksa Mata (Rp.75.000)<br>
+            <input type="checkbox" id="guladarah" name="guladarah" value=100 class="chkb">Cek Gula Darah (Rp.100.000)<br>
+            <input type="checkbox" id="kolestrol" name="kolestrol" value=120 class="chkb">Cek Kolestrol (Rp.120.000)<br>
+            <span class="serviceerror">Anda belum memilih jenis layanan</span>
+        </div>
+        <div>
+            <span class="label">Pembayaran </span> <br>
+            <input type="radio" name="paymode" class="radiobtn" value="COD">Bayar di Tempat <br>
+            <input type="radio" name="paymode" class="radiobtn" value="Transfer">Transfer Bank<br>
+            <input type="radio" name="paymode" class="radiobtn" value="Go-Pay">Go-Pay<br>
+            <span class="payerror">Anda belum memilih metode pembayaran</span>
+        </div>
+        <div>
+            <span class="label">Kota</span>
+            <select id="country" class="infobox">
+                <option value="0">Pilih Kota</option>
+                <option value="Jakarta">Jakarta</option>
+                <option value="Bogor">Bogor</option>
+                <option value="Depok">Depok</option>
+                <option value="Tangerang">Tangerang</option>
+                <option value="Bekasi">Bekasi</option>
+            </select>
+            <span class="error"> Pilih kota tempat anda tinggal</span>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $('.error').hide(); //Menyembunyikan seluruh class error
+                $('.serviceerror').addClass('error');  //mengaplikasikan style class seletor error pada pesan error dibagian layanan
+                $('.serviceerror').hide(); //Menyembunyikan class fooderror
+                $('.payerror').addClass('error'); //mengaplikasikan style dari class slector error pada pesan error bagian pembayaran
+                $('.payerror').hide(); //Menyembunyikan class payerror
+                $('.submit').click(function (event) {    //Menyatakan apa yang terjadi ketika tombol submit di klik
+                    var data = $('.username').val();     
+                    if (validate_userid(data)) {         //Jika username sukses divalidasi 
+                        $('.username').next().hide();    //tidak tampilkan pesan error
+                    }
+                    else {                               //Jika username tidak di validasi
+                        $('.username').next().show();    //tampilkan pesan error
+                    }
+                    data = $('.password').val();         //mengambil data yang telah diinput pada bagian password dan menyimpannya di variabel data
+                    var len = data.length;
+                    if (len < 1) {                       //Ketika panjang data kurang dari 1 (0)
+                        $('.password').next().show();    //tampilkan pesan error
+                    }
+                    else {                               //Ketika panjang data 1 atau lebih
+                        $('.password').next().hide();    //tidak tampilkan pesan error
+                    }
+                    data = $('.emailadd').val();         //mengambil data yang telah diinput pada bagian email dan menyimpannya di variabel data
+                    if (valid_email(data)) {             //Ketika email sesuai dengan ketentuan
+                        $('.emailadd').next().hide();    //tidak tampilkan pesan error 
+                    }
+                    else {                              //ketika email tidak sesuai dengan ketentuan
+                        $('.emailadd').next().show();   //tampilkan pesan error
+                    }
+                    var count = 0;
+                    $('div').find(':checkbox').each(function () {   //memeriksa setiap checkbox
+                        if ($(this).is(':checked')) {             //ketika checkbox di pilih user
+                            count++;                              //menambah nilai count (dihitung)
+                        }
+                    });
+                    if (count == 0) {                                          //jika checkbox yang dipilih = 0 atau tidak ada, 
+                        $('.serviceerror').css({ 'margin-left': 250 }).show();    //tampilkan pesan error dengan margin sebesar 250 dari kiri
+                    }
+                    else {                                        //jika checkbox yang dipilih tidak = 0
+                        $('.serviceerror').hide();                   //tidak tampilkan pesan error
+                    }
+                    count = 0;                                      
+                    $('div').find(':radio').each(function () {     //memeriksa tiap radio button
+                        if ($(this).is(':checked')) {            //jika radio button dipilih user
+                            count++;                             //menambah nilai count (dihitung)
+                        }
+                    });
+                    if (count == 0) {                                       //jika tidak ada radio button yang dipilih
+                        $('.payerror').css({ 'margin-left': 250 }).show();  //tampilkan pesan error dengan margin sebesar 250 dari kiri
+                    }
+                    else {                                                  //jika radio button dipilih
+                        $('.payerror').hide();                              //tidak tampilkan pesan error
+                    }
+                    count = $('select option:selected').val();              //mengambil value dari opsi yang dipilih dan disimpan dengan variabel count
+                    if (count == 0) {                                       //ketika count memiliki value 0 
+                        $('.infobox').next().show();                        //tampilkan pesan error
+                    }
+                    else {                                                  //ketika count memiliki value selain 0
+                        $('.infobox').next().hide();                        //tidak tampilkan pesan error
+                    }
+                    event.preventDefault();
+                });
+            });
+            function valid_email(email) {     //Memvalidasikan email berdasar pola abcdefgh@ijkl.com
+                var pattern = new RegExp(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/);
+                return pattern.test(email); 
+            }
+            function validate_userid(uid) {   //Memvalidasikan username yang hanya bisa berisi huruf, angka dan underscore.
+                var pattern = new RegExp(/^[a-z0-9_]+$/);
+                return pattern.test(uid); 
+            }
+        </script>
+        <input class="submit btn btn-info" type="submit" value="Submit">
+    </form>
+    
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <p>STAYHealth 2020</p>
+      </div>
+</body>
+
+</html>
